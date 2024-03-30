@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /* 树形dp套路第一步：
+    以某个节点X为头节点的子树中，分析答案有哪些可能性，并且这种分析是以X的左子树、X的右子树和X整棵树的角度来考虑可能性的
+    树形dp套路第二步：
+    根据第一步的可能性分析，列出所有需要的信息
+    树形dp套路第三步：
+    合并第二步的信息，对左树和右树提出同样的要求，并写出信息结构
+    树形dp套路第四步：
+    设计递归函数，递归函数是处理以X为头节点的情况下的答案。
+    包括设计递归的basecase，默认直接得到左树和右树的所有信息，以及把可能性做整合，并且要返回第三步的信息结构这四个小步骤
+    */
+    class Info {
+      constructor(maxDistance, height) {
+        this.maxDistance = maxDistance;
+        this.height = height;
+      }
+    }
+    var process = function (root) {
+      if (x == null) {
+        return new Info(0, 0)
+      }
+      var leftInfo = process(x.left)
+      var rightInfo = process(x.right)
+
+      var p1 = leftInfo.maxDistance
+      var p2 = rightInfo.maxDistance
+      var p3 = leftInfo.height + 1 + rightInfo.height
+      var maxDistance = Math.max(p3, Math.max(p1, p2))
+      var height = Math.max(leftInfo.height, rightInfo.height) + 1
+      return new Info(maxDistance, height)
+
+    }
+  </script>
+
+</body>
+
+</html>

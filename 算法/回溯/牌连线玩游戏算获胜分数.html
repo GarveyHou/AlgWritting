@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // leetcode486
+    /* 给定一个数组arr，代表数值不同的纸牌排成一条线。玩家A和玩家B依次拿走每张纸牌，规定A先拿，B后拿，每个玩家只能拿走最左或最后的纸牌，A和B都绝顶聪明，返回最后获胜者的分数。 */
+
+    /*有两个函数，一个是先手函数，一个后手函数，他们互相调用  */
+    // 先手函数
+    let f = function (arr, l, r) {
+      if (l == r) {
+        return arr[l]
+      }
+      return Math.max(arr[l] + s(arr, l + 1, r), arr[r] + s(arr, l, r - 1))
+    }
+    // 后手函数
+    let s = function (arr, l, r) {
+      if (l == r) {
+        return 0
+      }
+      // 被选了某个之后
+      return Math.min(f(arr, l + 1, r), f(arr, l, r - 1))
+    }
+    let arr = [4, 2, 1, 5]
+    // 如果先开始，就调用先手函数
+    console.log(Math.max(f(arr, 0, 3), s(arr, 0, 3)))
+
+    // 广联达消消乐，每次可以消两个相同的，谁没法消没输
+    // const str = 'aab'
+    // const str = 'abcdcba'
+    const str = 'baab'
+    const arr1 = str.split('')
+    // 先手函数
+    function f1(arr) {
+      // 拿到下表数组
+      let indexs = getDoubleIndex(arr)
+      // arr直接没了，直接输；下标没了，直接输；
+      if (arr.length == 0 || indexs.length == 0) {
+        return false
+      }
+      // indexs中的每一个都假设拿一遍开辟一条路
+      for (let i = 0; i < indexs.length; i++) {
+        // 去除本次index和index+1后的数组
+        let curarr = arr.slice(0, indexs[i]).concat(arr.slice(indexs[i] + 2))
+        // 后手中赢也等于赢
+        if (s1(curarr)) {
+          return true
+        }
+      }
+      // 没有情况可以赢，直接返回输
+      return false
+    }
+    // 后手函数
+    function s1(arr) {
+      let indexs = getDoubleIndex(arr)
+      // 如果只有一个下标，肯定被另一个拿走，我直接输
+      if (indexs.length == 1) {
+        return false
+      }
+      // 没了或没下表，那么另一个没的拿，输了；等于我赢了
+      if (arr.length == 0 || indexs.length == 0) {
+        return true
+      }
+      // 后手又把能拿的遍历一遍，开辟路，给到先手
+      for (let i = 0; i < indexs.length; i++) {
+        let curarr = arr.slice(0, indexs[i]).concat(arr.slice(indexs[i] + 2))
+        f1(curarr)
+      }
+    }
+    // 直接拿到arr中相邻字母相同的起始下表数组indexs    
+    function getDoubleIndex(arr) {
+      const res = []
+      for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i] == arr[i + 1]) {
+          res.push(i)
+        }
+      }
+      return res
+    }
+    console.log(f1(arr1))
+  </script>
+
+</body>
+
+</html>
